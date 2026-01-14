@@ -1,0 +1,12 @@
+{
+  "name": "@crypto-tracker/ai",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "uvicorn main:app --reload --host 0.0.0.0 --port 8000",
+    "build": "echo \"[ai] build placeholder\"",
+    "lint": "echo \"[ai] lint placeholder\"",
+    "typecheck": "py -3.10 -m venv .venv && .venv\\Scripts\\python -m pip install -r requirements.txt && .venv\\Scripts\\python -m pip install pytest && .venv\\Scripts\\python -m pytest -q && .venv\\Scripts\\python -m compileall backtest.py dataset.py features.py infer.py main.py models.py models_dl.py storage.py train.py tests",
+    "test": "py -3.10 -m venv .venv && .venv\\Scripts\\python -m pip install -r requirements.txt && .venv\\Scripts\\python -m pip install pytest && .venv\\Scripts\\python -m pytest -q && .venv\\Scripts\\python -m compileall backtest.py dataset.py features.py infer.py main.py models.py models_dl.py storage.py train.py tests"
+  }
+}

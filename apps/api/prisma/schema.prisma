@@ -1,0 +1,256 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String             @id @default(cuid())
+  email         String?            @unique
+  walletAddress String?            @unique
+  passwordHash  String?
+  totpSecret    String?
+  isTotpEnabled Boolean            @default(false)
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+
+  sessions        Session[]
+  watchlists      Watchlist[]
+  alerts          Alert[]
+  holdings        PortfolioHolding[]
+  rewardAccruals  RewardAccrual[]
+  rewardClaims    RewardClaim[]
+  apiAccessPasses ApiAccessPass[]
+  refreshTokens   RefreshToken[]
+  kycVerifications KycVerification[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String?
+  userAgent String?
+  ip        String?
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  revokedAt DateTime?
+
+  @@index([userId])
+}
+
+model Market {
+  id         String   @id @default(cuid())
+  symbol     String
+  baseAsset  String
+  quoteAsset String
+  exchange   String?
+  timeframe  String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  candles             Candle[]
+  indicatorSnapshots  IndicatorSnapshot[]
+  modelPredictions    ModelPrediction[]
+  alerts              Alert[]
+  watchlistEntries    WatchlistMarket[]
+
+  @@unique([symbol, exchange])
+}
+
+model Candle {
+  id        String   @id @default(cuid())
+  marketId  String
+  market    Market   @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  timestamp BigInt   @db.BigInt
+  open      Decimal  @db.Decimal(32, 16)
+  high      Decimal  @db.Decimal(32, 16)
+  low       Decimal  @db.Decimal(32, 16)
+  close     Decimal  @db.Decimal(32, 16)
+  volume    Decimal  @db.Decimal(32, 16)
+  timeframe String
+  source    String?
+  createdAt DateTime @default(now())
+
+  @@unique([marketId, timestamp, timeframe])
+  @@index([marketId, timestamp])
+}
+
+model IndicatorSnapshot {
+  id        String   @id @default(cuid())
+  marketId  String
+  market    Market   @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  timeframe String
+  asOf      BigInt   @db.BigInt
+  data      Json
+  source    String?
+  version   String?
+  createdAt DateTime @default(now())
+
+  @@unique([marketId, timeframe, asOf])
+  @@index([marketId, asOf])
+}
+
+model ModelPrediction {
+  id                 String   @id @default(cuid())
+  marketId           String
+  market             Market   @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  timeframe          String
+  horizonMinutes     Int
+  asOf               BigInt   @db.BigInt
+  probabilities      Json
+  regime             Json?
+  featureImportances Json?
+  requestId          String?
+  createdAt          DateTime @default(now())
+
+  @@index([marketId, timeframe, asOf])
+}
+
+model Watchlist {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  markets WatchlistMarket[]
+
+  @@index([userId])
+}
+
+model WatchlistMarket {
+  watchlistId String
+  marketId    String
+  addedAt     DateTime @default(now())
+  watchlist   Watchlist @relation(fields: [watchlistId], references: [id], onDelete: Cascade)
+  market      Market    @relation(fields: [marketId], references: [id], onDelete: Cascade)
+
+  @@id([watchlistId, marketId])
+  @@index([marketId])
+}
+
+model Alert {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  marketId  String
+  market    Market   @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  type      String
+  condition Json
+  status    String   @default("active")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([marketId])
+}
+
+model PortfolioHolding {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  assetSymbol String
+  quantity    Decimal  @db.Decimal(32, 16)
+  averageCost Decimal? @db.Decimal(32, 16)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([userId, assetSymbol])
+}
+
+model RewardAccrual {
+  id          String        @id @default(cuid())
+  userId      String
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cycle       String
+  token       String
+  amount      Decimal       @db.Decimal(32, 16)
+  claimableAt DateTime
+  expiresAt   DateTime?
+  status      RewardStatus  @default(pending)
+  merkleProof Json?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  claims RewardClaim[]
+
+  @@index([userId, cycle])
+}
+
+model RewardClaim {
+  id               String         @id @default(cuid())
+  rewardAccrualId  String
+  rewardAccrual    RewardAccrual  @relation(fields: [rewardAccrualId], references: [id], onDelete: Cascade)
+  userId           String
+  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  txHash           String?
+  network          String?
+  status           RewardStatus   @default(claimed)
+  claimedAt        DateTime       @default(now())
+  onchainReceiptId String?
+  onchainReceipt   OnchainReceipt? @relation(fields: [onchainReceiptId], references: [id], onDelete: SetNull)
+
+  @@index([rewardAccrualId])
+  @@index([userId])
+}
+
+model OnchainReceipt {
+  id          String        @id @default(cuid())
+  hash        String        @unique
+  chainId     Int
+  anchoredAt  DateTime      @default(now())
+  payload     Json?
+  rewardClaims RewardClaim[]
+}
+
+model ApiAccessPass {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  walletAddress  String
+  tokenAddress   String
+  priceWei       Decimal  @db.Decimal(32, 0)
+  tokenSymbol    String
+  periodMinutes  Int
+  purchasedAt    DateTime @default(now())
+  expiresAt      DateTime
+  txHash         String?
+
+  @@index([userId])
+  @@index([walletAddress])
+}
+
+model RefreshToken {
+  id         String   @id @default(cuid())
+  token      String   @unique
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  expiresAt  DateTime
+  revokedAt  DateTime?
+}
+
+model KycVerification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider  String
+  status    String
+  reference String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+enum RewardStatus {
+  pending
+  claimable
+  claimed
+  expired
+}

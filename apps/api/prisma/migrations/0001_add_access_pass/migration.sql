@@ -1,0 +1,1 @@
+-- This file is a placeholder for documentation; run `prisma migrate dev` to generate real migrations.

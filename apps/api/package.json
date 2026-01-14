@@ -1,0 +1,55 @@
+{
+  "name": "@crypto-tracker/api",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "node ../../node_modules/tsx/dist/cli.cjs watch src/index.ts",
+    "start": "node dist/index.js",
+    "build": "tsc -p tsconfig.json",
+    "lint": "echo \"[api] lint not configured yet\"",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run --reporter verbose",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:seed": "prisma db seed"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
+  "dependencies": {
+    "@fastify/cors": "^8.4.2",
+    "@fastify/swagger": "^8.10.0",
+    "@fastify/swagger-ui": "^1.10.0",
+    "@fastify/websocket": "^8.3.1",
+    "@fastify/rate-limit": "^8.0.0",
+    "@fastify/helmet": "^11.1.1",
+    "@prisma/client": "^5.7.1",
+    "ethers": "^6.12.2",
+    "ccxt": "^4.1.21",
+    "bullmq": "^4.12.3",
+    "dotenv": "^16.3.1",
+    "fastify": "^4.25.2",
+    "fastify-plugin": "^4.5.1",
+    "ioredis": "^5.3.2",
+    "pino": "^8.16.1",
+    "merkletreejs": "^0.2.32",
+    "undici": "^6.4.0",
+    "viem": "^1.21.4",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "google-auth-library": "^9.4.0",
+    "speakeasy": "^2.0.0",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.5",
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/speakeasy": "^2.0.10",
+    "prisma": "^5.7.1",
+    "pino-pretty": "^10.2.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.0"
+  }
+}

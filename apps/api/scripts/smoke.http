@@ -1,0 +1,105 @@
+### Health
+GET http://localhost:4000/health
+
+### Markets
+GET http://localhost:4000/markets
+
+GET http://localhost:4000/markets/stats
+
+### Snapshot (adjust symbol/timeframe as needed)
+GET http://localhost:4000/snapshot?symbol=BTC/USDT&timeframe=1h
+GET http://localhost:4000/snapshot?symbol=BTC/USDT&timeframe=4h
+
+### Auth
+POST http://localhost:4000/auth/register
+Content-Type: application/json
+
+{
+  "email": "demo@example.com",
+  "password": "changeme",
+  "walletAddress": "0x0000000000000000000000000000000000000000"
+}
+
+### Replace <token> with returned JWT
+GET http://localhost:4000/auth/me
+Authorization: Bearer <token>
+
+### Portfolio upsert
+POST http://localhost:4000/portfolio/holdings
+Content-Type: application/json
+
+{
+  "wallet": "0x0000000000000000000000000000000000000000",
+  "assetSymbol": "BTC",
+  "quantity": 0.1,
+  "averageCost": 30000
+}
+
+### Portfolio fetch
+GET http://localhost:4000/portfolio/holdings?wallet=0x0000000000000000000000000000000000000000
+
+### Wallet balances (configure WALLET_TOKEN_LIST or reward token)
+GET http://localhost:4000/wallet/balances?address=0x0000000000000000000000000000000000000000
+
+### Premium status
+GET http://localhost:4000/premium/status?address=0x0000000000000000000000000000000000000000
+
+### Rewards
+GET http://localhost:4000/rewards/epoch/latest
+GET http://localhost:4000/rewards/history?address=0x0000000000000000000000000000000000000000
+GET http://localhost:4000/rewards/proof?address=0x0000000000000000000000000000000000000000
+
+### AI chat summary
+POST http://localhost:4000/ai/chat
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+  "message": "What's the outlook?",
+  "symbol": "BTC/USDT",
+  "timeframe": "1h",
+  "horizonMinutes": 60
+}
+
+### AI direct inference (requires JWT + access pass)
+POST http://localhost:4000/ai/infer
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+  "symbol": "BTC/USDT",
+  "timeframe": "1h",
+  "horizonMinutes": 60,
+  "candles": [],
+  "indicators": []
+}
+
+### AI backtest (requires JWT + access pass)
+POST http://localhost:4000/ai/backtest
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+  "symbol": "BTC/USDT",
+  "timeframe": "1h",
+  "horizonMinutes": 60,
+  "candles": [],
+  "indicators": []
+}
+
+### External proxies
+GET http://localhost:4000/external/coingecko/market?ids=bitcoin,ethereum
+GET http://localhost:4000/dex/spot?chainId=1&sellToken=0xA0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&buyToken=0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2
+Accept: application/json
+
+###
+
+GET http://localhost:4000/dex/pool/reserves?chainId=1&poolAddress=0x397FF1542f962076d0BFE58eA045FfA2d347ACa0
+Accept: application/json
+
+### Billing price
+GET http://localhost:4000/billing/price?chainId=31337
+
+### Billing purchase (requires JWT and wallet with ACT balance)
+POST http://localhost:4000/billing/purchase
+Authorization: Bearer <token>

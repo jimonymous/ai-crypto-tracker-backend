@@ -1,0 +1,12 @@
+{
+  "symbol": "CAKE/WBNB",
+  "timeframe": "1m",
+  "horizon_minutes": 60,
+  "feature_names": [
+    "return_1",
+    "log_return",
+    "volume_change",
+    "volatility_10",
+    "volatility_20"
+  ]
+}

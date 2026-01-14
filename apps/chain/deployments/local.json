@@ -1,0 +1,19 @@
+{
+  "network": "local",
+  "chainId": "31337",
+  "deployedAt": "TBD",
+  "contracts": {
+    "token": { "address": "0x0000000000000000000000000000000000000000", "name": "Token" },
+    "premiumPass": { "address": "0x0000000000000000000000000000000000000000", "name": "PremiumPass" },
+    "rewardsMerkle": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "name": "RewardsMerkle",
+      "token": "0x0000000000000000000000000000000000000000"
+    },
+    "feeTreasury": { "address": "0x0000000000000000000000000000000000000000", "name": "FeeTreasury" },
+    "staking": { "address": "0x0000000000000000000000000000000000000000", "name": "Staking" },
+    "liquidityPool": { "address": "0x0000000000000000000000000000000000000000", "name": "LiquidityPoolStub" },
+    "governance": { "address": "0x0000000000000000000000000000000000000000", "name": "GovernanceStub" }
+    }
+}
+

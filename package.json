@@ -1,0 +1,25 @@
+{
+  "name": "crypto-tracker",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "node \"./node_modules/concurrently/dist/bin/concurrently.js\" -k -c auto -n api \"npm run dev --workspace apps/api --if-present\"",
+    "build": "npm run build --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "typecheck:js": "npm run typecheck --workspace apps/api && npm run typecheck --workspace apps/chain && npm run typecheck --workspace apps/web && npm run typecheck --workspace packages/shared",
+    "test:js": "npm run test --workspace apps/api && npm run test --workspace apps/chain",
+    "typecheck:ai": "cd apps/ai && npm run typecheck",
+    "test:ai": "cd apps/ai && npm run test"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.5",
+    "concurrently": "^8.2.2",
+    "typescript": "^5.3.3"
+  }
+}

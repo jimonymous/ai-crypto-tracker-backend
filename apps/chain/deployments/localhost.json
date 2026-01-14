@@ -1,0 +1,36 @@
+{
+  "network": "localhost",
+  "chainId": "31337",
+  "deployedAt": "2026-01-13T16:09:40.396Z",
+  "contracts": {
+    "token": {
+      "address": "0x02b0B4EFd909240FCB2Eb5FAe060dC60D112E3a4",
+      "name": "Token"
+    },
+    "premiumPass": {
+      "address": "0x638A246F0Ec8883eF68280293FFE8Cfbabe61B44",
+      "name": "PremiumPass"
+    },
+    "rewardsMerkle": {
+      "address": "0x6C2d83262fF84cBaDb3e416D527403135D757892",
+      "name": "RewardsMerkle",
+      "token": "0x02b0B4EFd909240FCB2Eb5FAe060dC60D112E3a4"
+    },
+    "feeTreasury": {
+      "address": "0xFD6F7A6a5c21A3f503EBaE7a473639974379c351",
+      "name": "FeeTreasury"
+    },
+    "staking": {
+      "address": "0xa6e99A4ED7498b3cdDCBB61a6A607a4925Faa1B7",
+      "name": "Staking"
+    },
+    "liquidityPool": {
+      "address": "0x5302E909d1e93e30F05B5D6Eea766363D14F9892",
+      "name": "LiquidityPoolStub"
+    },
+    "governance": {
+      "address": "0x0ed64d01D0B4B655E410EF1441dD677B695639E7",
+      "name": "GovernanceStub"
+    }
+  }
+}

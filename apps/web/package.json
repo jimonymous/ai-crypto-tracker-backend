@@ -1,0 +1,12 @@
+{
+  "name": "@crypto-tracker/web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "echo \"[web] Vite dev server not implemented yet\"",
+    "build": "echo \"[web] build placeholder\"",
+    "lint": "echo \"[web] lint placeholder\"",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "node --test tests/*.test.js"
+  }
+}

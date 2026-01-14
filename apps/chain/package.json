@@ -1,0 +1,24 @@
+{
+  "name": "@crypto-tracker/chain",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat run scripts/deploy.ts --network hardhat && hardhat test",
+    "test:deploy": "hardhat run scripts/deploy.ts --network hardhat",
+    "deploy:local": "hardhat run scripts/deploy.ts --network localhost",
+    "deploy:testnet": "hardhat run scripts/deploy.ts --network sepolia",
+    "dev": "sh -c 'hardhat node --hostname 127.0.0.1 --port 8545 & pid=$!; sleep 5; hardhat run scripts/deploy.ts --network localhost; wait $pid'",
+    "clean": "hardhat clean",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^3.0.0",
+    "@openzeppelin/contracts": "^4.9.5",
+    "dotenv": "^16.3.1",
+    "hardhat": "^2.19.1"
+  },
+  "devDependencies": {
+    "merkletreejs": "^0.2.32"
+  }
+}
